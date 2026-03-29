@@ -118,5 +118,17 @@ TrustVerify/
 
 ---
 
-##  License
+## Demo Video
+
+A 2–5 minute walkthrough covering:
+- Running the full sign and verify workflow
+- Deliberately tampering with `metadata.json` to trigger **Verification Failed**
+- Explanation of why hashing provides integrity but not authenticity
+
+🎥 [Watch on YouTube](PASTE_YOUR_LINK_HERE)
+
+---
+
+## License
+
 This project was developed for educational purposes — Information Security Course.
