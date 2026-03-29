@@ -1,5 +1,3 @@
-
-
 import hashlib
 import json
 import os
@@ -10,12 +8,11 @@ from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.backends import default_backend
 
 
-# --- Part 1: Hashing and Integrity ---
+#  Part 1: Hashing and Integrity 
 
 def hash_file(filepath):
     sha256 = hashlib.sha256()
     with open(filepath, "rb") as f:
-        # Read in chunks so large files don't load fully into memory
         while chunk := f.read(8192):
             sha256.update(chunk)
     return sha256.hexdigest()
@@ -60,6 +57,12 @@ def check_integrity(directory):
             print(f"  MODIFIED : {filename}")
             all_ok = False
 
+    for filename in os.listdir(directory):
+        filepath = os.path.join(directory, filename)
+        if os.path.isfile(filepath) and filename not in saved:
+            print(f"  NEW FILE : {filename}")
+            all_ok = False
+
     print()
     if all_ok:
         print("  All files intact.")
@@ -67,7 +70,7 @@ def check_integrity(directory):
         print("  Warning: some files were modified or are missing.")
 
 
-# --- Part 2: RSA Keys and Signatures ---
+# Part 2: RSA Keys and Signatures 
 
 def generate_keys():
     private_key = rsa.generate_private_key(
@@ -109,7 +112,6 @@ def sign_manifest():
             f.read(), password=None, backend=default_backend()
         )
 
-    # RSA signs the hash of the file, not the file itself
     signature = private_key.sign(
         manifest_hash.encode(),
         padding.PSS(
@@ -153,11 +155,10 @@ def verify_signature():
         print("  Verification passed. Manifest is authentic.")
 
     except Exception:
-        # verify() raises an exception if the signature does not match
         print("  Verification failed. Manifest may have been tampered with.")
 
 
-# --- CLI ---
+#  CLI 
 
 def main():
     parser = argparse.ArgumentParser(
